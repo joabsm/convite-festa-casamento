@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Convite – Joab & Valeska</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Dancing+Script:wght@600;700&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --g-dark : #3a5c3a;
+  --g-mid  : #5d8a5d;
+  --g-light: #8fb98f;
+  --g-pale : #d4e8d4;
+  --cream  : #f7f4ef;
+  --txt    : #2c2c2c;
+  --txt2   : #555;
+  --gold   : #c9a96e;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+html,body{
+  height:100%;width:100%;
+  overflow:hidden;
+  font-family:'Cormorant Garamond',Georgia,serif;
+  background:#ddd9d0;
+}
+
+.wrap{
+  height:100dvh;
+  display:flex;align-items:center;justify-content:center;
+  padding:6px;
+}
+
+.card{
+  width:100%;max-width:430px;
+  height:100%;max-height:820px;
+  background:var(--cream);
+  border-radius:6px;overflow:hidden;
+  box-shadow:0 16px 50px rgba(0,0,0,.22);
+  display:flex;flex-direction:column;
+  animation:fadeUp .7s ease both;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+
+.bio-top{
+  flex:0 0 auto;
+  height:clamp(75px,15vh,115px);
+  background:linear-gradient(150deg,#b8d4b2 0%,#cfe3ca 45%,var(--cream) 100%);
+  position:relative;overflow:hidden;
+}
+.bio-top svg{position:absolute;inset:0;width:100%;height:100%}
+
+.body{
+  flex:1 1 0;overflow:hidden;
+  display:flex;flex-direction:column;
+  justify-content:space-evenly;
+  padding:0 20px;
+}
+
+.mono{
+  text-align:center;
+  font-family:'Cinzel',serif;
+  font-size:clamp(28px,6vw,42px);
+  font-weight:600;letter-spacing:6px;color:var(--txt);
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  line-height:1;padding-top:2px;
+}
+.mono svg{width:18px;height:18px;color:var(--g-mid)}
+
+.quote{
+  text-align:center;
+  font-size:clamp(10px,2.3vw,12px);
+  font-style:italic;color:var(--txt2);line-height:1.55;
+  border-top:1px solid var(--g-pale);border-bottom:1px solid var(--g-pale);
+  padding:6px;margin:0 2px;
+}
+.quote span{font-style:normal;font-size:.85em;color:var(--g-mid);letter-spacing:.5px}
+
+.bless{text-align:center;font-size:clamp(11px,2.4vw,13px);color:var(--txt2);letter-spacing:.4px}
+
+.names{
+  text-align:center;
+  font-family:'Dancing Script',cursive;
+  font-size:clamp(30px,7.5vw,48px);
+  font-weight:700;color:var(--g-dark);line-height:1;
+  display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;
+}
+.names em{font-size:.58em;color:var(--g-mid);font-style:normal}
+
+.invite{text-align:center;font-size:clamp(11px,2.4vw,13px);color:var(--txt2)}
+.invite strong{
+  display:block;font-family:'Cinzel',serif;
+  font-size:clamp(13px,3.2vw,17px);letter-spacing:4px;
+  color:var(--txt);font-weight:600;margin-top:2px;
+}
+
+.date-wrap{text-align:center}
+.day-lbl{font-family:'Cinzel',serif;font-size:clamp(8px,1.8vw,10px);letter-spacing:4px;color:var(--txt2);margin-bottom:3px}
+.date-row{display:flex;align-items:center;justify-content:center}
+.date-row hr{flex:1;border:none;border-top:1px solid rgba(0,0,0,.18)}
+.date-m,.date-y{font-family:'Cinzel',serif;font-size:clamp(9px,2vw,12px);letter-spacing:3px;color:var(--txt);padding:0 9px}
+.date-n{font-family:'Cinzel',serif;font-size:clamp(36px,8.5vw,52px);font-weight:600;color:var(--g-dark);line-height:1;padding:0 7px}
+.date-time{font-family:'Cinzel',serif;font-size:clamp(11px,2.7vw,14px);font-weight:600;letter-spacing:2px;color:var(--txt);margin-top:2px}
+
+.addr{text-align:center;font-size:clamp(11px,2.4vw,13px);color:var(--txt2);line-height:1.5}
+
+.act-bar{
+  flex:0 0 auto;
+  background:#ece8e0;border-top:1px solid #d8d3ca;
+  padding:9px 10px 10px;text-align:center;
+}
+.act-title{font-family:'Cinzel',serif;font-size:clamp(6.5px,1.6vw,8.5px);letter-spacing:2.5px;color:var(--txt2);margin-bottom:9px;font-weight:600}
+.act-grid{display:flex;justify-content:center;gap:clamp(8px,2.5vw,20px)}
+.act-btn{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  background:none;border:none;cursor:pointer;text-decoration:none;color:inherit;
+  transition:transform .2s;
+}
+.act-btn:hover{transform:translateY(-3px)}
+.act-ico{
+  width:clamp(42px,10vw,54px);height:clamp(42px,10vw,54px);
+  border-radius:50%;background:var(--g-light);
+  display:flex;align-items:center;justify-content:center;
+  font-size:clamp(17px,4.2vw,21px);
+  border:2px solid var(--gold);
+  box-shadow:0 2px 8px rgba(0,0,0,.12);
+  transition:background .2s,box-shadow .2s;
+}
+.act-btn:hover .act-ico{background:var(--g-mid);box-shadow:0 5px 16px rgba(0,0,0,.18)}
+.act-lbl{font-family:'Cinzel',serif;font-size:clamp(6.5px,1.5vw,8px);letter-spacing:.9px;color:var(--txt);font-weight:600;text-align:center;line-height:1.3}
+
+.bio-bot{
+  flex:0 0 auto;height:clamp(44px,8vh,65px);
+  background:linear-gradient(to top,#b8d4b2 0%,#cfe3ca 60%,transparent 100%);
+  position:relative;overflow:hidden;
+}
+.bio-bot svg{position:absolute;bottom:0;left:0;width:100%;height:100%}
+
+/* ════ MODAIS ════ */
+.overlay{
+  position:fixed;inset:0;
+  background:rgba(35,50,35,.55);
+  backdrop-filter:blur(5px);
+  display:flex;align-items:center;justify-content:center;
+  z-index:900;padding:16px;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.overlay.open{opacity:1;pointer-events:all}
+.modal{
+  background:var(--cream);border-radius:10px;
+  width:100%;max-width:360px;
+  padding:26px 22px 20px;position:relative;
+  box-shadow:0 20px 50px rgba(0,0,0,.28);
+  transform:scale(.9) translateY(18px);
+  transition:transform .35s cubic-bezier(.34,1.56,.64,1);
+  max-height:90dvh;overflow-y:auto;overflow-x:hidden;
+}
+.modal-gift{padding-top:0}
+.overlay.open .modal{transform:scale(1) translateY(0)}
+.m-close{position:absolute;top:10px;right:14px;background:none;border:none;font-size:18px;cursor:pointer;color:var(--txt2);z-index:10}
+.m-close-banner{
+  position:absolute;top:10px;right:12px;z-index:20;
+  width:30px;height:30px;border-radius:50%;
+  background:rgba(0,0,0,.38);border:none;cursor:pointer;
+  color:#fff;font-size:15px;line-height:1;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .2s;
+}
+.m-close-banner:hover{background:rgba(0,0,0,.6)}
+.m-icon{font-size:26px;text-align:center;margin-bottom:5px}
+.m-title{font-family:'Dancing Script',cursive;font-size:25px;color:var(--g-dark);text-align:center;margin-bottom:3px}
+.m-sub{font-size:12px;color:var(--txt2);text-align:center;font-style:italic;margin-bottom:14px}
+.m-input{
+  width:100%;padding:10px 13px;
+  border:1.5px solid var(--g-pale);border-radius:6px;
+  font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--txt);
+  background:#fff;outline:none;
+  transition:border-color .2s,box-shadow .2s;margin-bottom:12px;
+}
+.m-input:focus{border-color:var(--g-mid);box-shadow:0 0 0 3px rgba(93,138,93,.15)}
+.m-btn{
+  width:100%;padding:11px;
+  background:var(--g-dark);color:#fff;border:none;border-radius:6px;
+  font-family:'Cinzel',serif;font-size:11.5px;letter-spacing:2px;cursor:pointer;
+  box-shadow:0 4px 14px rgba(58,92,58,.3);
+  transition:background .2s,transform .1s;
+}
+.m-btn:hover{background:var(--g-mid)}
+.m-btn:active{transform:scale(.97)}
+.m-btn:disabled{opacity:.65;cursor:not-allowed}
+.m-err{color:#b83232;font-size:11.5px;font-style:italic;margin:-8px 0 10px;display:none}
+
+/* success */
+.m-success{display:none;flex-direction:column;align-items:center;gap:9px;padding:6px 0;text-align:center}
+.s-ico{
+  width:54px;height:54px;border-radius:50%;background:var(--g-pale);
+  display:flex;align-items:center;justify-content:center;font-size:26px;
+  animation:popIn .5s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes popIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.s-title{font-family:'Dancing Script',cursive;font-size:25px;color:var(--g-dark)}
+.s-msg{font-size:12.5px;color:var(--txt2);line-height:1.6;font-style:italic}
+.s-close{
+  margin-top:5px;padding:9px 22px;background:var(--g-dark);color:#fff;
+  border:none;border-radius:6px;font-family:'Cinzel',serif;font-size:10.5px;
+  letter-spacing:2px;cursor:pointer;
+}
+
+/* ── GIFT LIST ── */
+.gift-counter{font-size:11px;color:var(--txt2);text-align:center;margin-bottom:8px;font-style:italic}
+
+.gift-list{
+  list-style:none;display:flex;flex-direction:column;gap:6px;
+  margin-bottom:14px;max-height:340px;overflow-y:auto;padding-right:3px;
+}
+.gift-list::-webkit-scrollbar{width:3px}
+.gift-list::-webkit-scrollbar-track{background:var(--g-pale);border-radius:4px}
+.gift-list::-webkit-scrollbar-thumb{background:var(--g-light);border-radius:4px}
+
+/* item normal */
+.gift-item{
+  display:flex;align-items:center;gap:9px;
+  padding:9px 11px;border:1.5px solid var(--g-pale);border-radius:8px;
+  cursor:pointer;transition:background .15s,border-color .15s;user-select:none;
+}
+.gift-item:hover{background:#edf5ed}
+.gift-item.checked{background:#e1f0e1;border-color:var(--g-mid)}
+
+/* item JÁ DADO — desabilitado */
+.gift-item.taken{
+  background:#f0f0ee;
+  border-color:#d0cdc8;
+  cursor:not-allowed;
+  opacity:.6;
+}
+.gift-item.taken .gift-name{text-decoration:line-through;color:#999}
+.gift-item.taken .taken-badge{
+  font-family:'Cinzel',serif;
+  font-size:8px;letter-spacing:.8px;
+  color:#fff;background:#aaa;
+  border-radius:4px;padding:2px 5px;
+  white-space:nowrap;flex-shrink:0;
+}
+
+.gift-item input[type=checkbox]{width:16px;height:16px;accent-color:var(--g-dark);cursor:pointer;flex-shrink:0}
+.gift-item.taken input[type=checkbox]{cursor:not-allowed}
+.gift-emoji{font-size:17px;flex-shrink:0}
+.gift-name{font-size:13px;color:var(--txt);flex:1;line-height:1.3;cursor:pointer}
+
+/* ── fotos dos presentes ── */
+.gift-img{
+  width:52px;height:52px;
+  border-radius:7px;
+  object-fit:cover;
+  flex-shrink:0;
+  border:1.5px solid var(--g-pale);
+  background:#eee;
+  transition:transform .2s,border-color .2s;
+  cursor:zoom-in;
+}
+.gift-item:hover .gift-img{transform:scale(1.06);border-color:var(--g-mid)}
+.gift-item.checked .gift-img{border-color:var(--g-mid);box-shadow:0 0 0 2px var(--g-pale)}
+.gift-item.taken .gift-img{filter:grayscale(1);opacity:.5;cursor:default}
+.gift-info{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
+.gift-info .gift-name{font-size:13px}
+.gift-info .gift-emoji-sm{font-size:12px;color:var(--txt2)}
+
+/* ── BANNER DO MODAL DE PRESENTES ── */
+.gift-banner{
+  position:relative;
+  width:100%;
+  /* proporção 800×300 = 37.5% */
+  aspect-ratio:828/372;
+  border-radius:10px 10px 0 0;
+  overflow:hidden;
+  flex-shrink:0;
+}
+.gift-banner-img{
+  width:100%;height:100%;
+  object-fit:cover;
+  display:block;
+}
+/* fallback degradê se imagem não carregar */
+
+.gift-banner-fallback span{
+  font-size:38px;
+  filter:drop-shadow(0 2px 6px rgba(0,0,0,.3));
+}
+/* overlay escurecido + gradiente na base para o texto */
+.gift-banner-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(
+    to bottom,
+    rgba(20,40,20,.10) 0%,
+    rgba(20,40,20,.45) 60%,
+    rgba(20,40,20,.72) 100%
+  );
+}
+.gift-banner-text{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:10px 14px 11px;
+  display:flex;flex-direction:column;gap:1px;
+}
+.gift-banner-title{
+  font-family:'Dancing Script',cursive;
+  font-size:22px;font-weight:700;
+  color:#fff;
+  text-shadow:0 1px 6px rgba(0,0,0,.5);
+  line-height:1.1;
+}
+.gift-banner-sub{
+  font-family:'Cinzel',serif;
+  font-size:8px;letter-spacing:2.5px;
+  color:rgba(255,255,255,.78);
+  text-shadow:0 1px 4px rgba(0,0,0,.4);
+}
+/* paleta de cores decorativa */
+.gift-banner-palette{
+  position:absolute;top:10px;left:12px;
+  display:flex;gap:4px;align-items:center;
+}
+.gift-banner-palette span{
+  width:10px;height:10px;border-radius:50%;
+  border:1.5px solid rgba(255,255,255,.5);
+  display:block;
+}
+
+/* conteúdo do modal abaixo do banner */
+.gift-modal-body{padding:14px 22px 20px}
+
+/* ── LIGHTBOX ── */
+.lightbox{
+  position:fixed;inset:0;z-index:1100;
+  background:rgba(10,20,10,.92);
+  backdrop-filter:blur(8px);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:14px;
+  opacity:0;pointer-events:none;
+  transition:opacity .28s;
+  padding:20px;
+}
+.lightbox.open{opacity:1;pointer-events:all}
+.lightbox-inner{
+  position:relative;
+  max-width:min(92vw,520px);
+  width:100%;
+}
+.lightbox-img{
+  width:100%;
+  max-height:70dvh;
+  object-fit:contain;
+  border-radius:10px;
+  box-shadow:0 24px 60px rgba(0,0,0,.6);
+  display:block;
+  transform:scale(.88);
+  transition:transform .32s cubic-bezier(.34,1.56,.64,1);
+}
+.lightbox.open .lightbox-img{transform:scale(1)}
+.lightbox-close{
+  position:absolute;top:-12px;right:-12px;
+  width:32px;height:32px;border-radius:50%;
+  background:var(--cream);border:none;cursor:pointer;
+  font-size:14px;font-weight:700;color:var(--txt);
+  box-shadow:0 4px 12px rgba(0,0,0,.35);
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .15s,background .15s;
+  z-index:10;
+}
+.lightbox-close:hover{transform:scale(1.15);background:#fff}
+.lightbox-caption{
+  font-family:'Cinzel',serif;
+  font-size:12px;letter-spacing:2px;
+  color:rgba(255,255,255,.82);
+  text-align:center;
+  text-shadow:0 1px 4px rgba(0,0,0,.5);
+}
+.lightbox-hint{
+  font-size:10px;color:rgba(255,255,255,.38);
+  letter-spacing:1px;font-style:italic;
+  text-align:center;
+}
+
+/* "Outro" — input inline */
+.gift-outro-input{
+  width:100%;
+  margin-top:7px;
+  padding:7px 10px;
+  border:1.5px solid var(--g-pale);border-radius:6px;
+  font-family:'Cormorant Garamond',serif;font-size:13.5px;color:var(--txt);
+  background:#fff;outline:none;
+  transition:border-color .2s,box-shadow .2s;
+  display:none;
+}
+.gift-outro-input:focus{border-color:var(--g-mid);box-shadow:0 0 0 3px rgba(93,138,93,.15)}
+.gift-item-outro{flex-direction:column;align-items:flex-start}
+.gift-item-outro .gift-row{display:flex;align-items:center;gap:9px;width:100%}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<div class="card">
+
+  <!-- TOP BOTANICAL -->
+  <div class="bio-top">
+    <svg viewBox="0 0 430 115" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <g opacity=".88">
+        <ellipse cx="8"  cy="24" rx="30" ry="11" fill="#6fa06f" transform="rotate(-35 8 24)"/>
+        <ellipse cx="28" cy="7"  rx="24" ry="9"  fill="#5d8a5d" transform="rotate(-20 28 7)"/>
+        <ellipse cx="52" cy="42" rx="28" ry="10" fill="#8fb98f" transform="rotate(-52 52 42)"/>
+        <ellipse cx="14" cy="55" rx="22" ry="8"  fill="#6a9e6a" transform="rotate(-10 14 55)"/>
+        <ellipse cx="72" cy="14" rx="20" ry="7"  fill="#9dc89d" transform="rotate(-62 72 14)"/>
+        <ellipse cx="0"  cy="76" rx="34" ry="10" fill="#5d8a5d" transform="rotate(5 0 76)"/>
+        <ellipse cx="40" cy="72" rx="26" ry="9"  fill="#7aaf7a" transform="rotate(-42 40 72)"/>
+        <line x1="3" y1="90" x2="80" y2="5" stroke="#3a5c3a" stroke-width="1" opacity=".3"/>
+      </g>
+      <g opacity=".88">
+        <ellipse cx="422" cy="22" rx="30" ry="11" fill="#6fa06f" transform="rotate(35 422 22)"/>
+        <ellipse cx="402" cy="6"  rx="24" ry="9"  fill="#5d8a5d" transform="rotate(20 402 6)"/>
+        <ellipse cx="378" cy="40" rx="28" ry="10" fill="#8fb98f" transform="rotate(52 378 40)"/>
+        <ellipse cx="416" cy="53" rx="22" ry="8"  fill="#6a9e6a" transform="rotate(10 416 53)"/>
+        <ellipse cx="358" cy="13" rx="20" ry="7"  fill="#9dc89d" transform="rotate(62 358 13)"/>
+        <ellipse cx="430" cy="74" rx="34" ry="10" fill="#5d8a5d" transform="rotate(-5 430 74)"/>
+        <ellipse cx="390" cy="70" rx="26" ry="9"  fill="#7aaf7a" transform="rotate(42 390 70)"/>
+        <line x1="427" y1="88" x2="350" y2="4" stroke="#3a5c3a" stroke-width="1" opacity=".3"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+    <div class="mono">
+      J
+      <svg viewBox="0 0 18 18" fill="none">
+        <path d="M9 1 Q10 5.5 9 9 Q8 12.5 9 17" stroke="currentColor" stroke-width="1.2" fill="none"/>
+        <circle cx="9" cy="4"  r="1.1" fill="currentColor"/>
+        <circle cx="9" cy="9"  r="1.1" fill="currentColor"/>
+        <circle cx="9" cy="14" r="1.1" fill="currentColor"/>
+      </svg>
+      V
+    </div>
+
+    <div class="quote">
+      "Para onde fores, irei; onde tu repousares, repousarei. Teu Deus será o meu Deus. Teu caminho o meu será."
+      <br><span>— Rute 1:16-17</span>
+    </div>
+
+    <p class="bless">Com a bênção de Deus e de seus pais</p>
+
+    <div class="names">Joab <em>💍</em> Valeska</div>
+
+    <p class="invite">
+      Convidam para cerimônia de seu
+      <strong>CASAMENTO</strong>
+    </p>
+
+    <div class="date-wrap">
+      <div class="day-lbl">· SÁBADO ·</div>
+      <div class="date-row">
+        <hr><span class="date-m">JUNHO</span>
+        <span class="date-n">21</span>
+        <span class="date-y">2025</span><hr>
+      </div>
+      <div class="date-time">18h30</div>
+    </div>
+
+    <p class="addr">
+      R. Amazonas, 1119 – Vila Perino<br>
+      Ourinhos – SP, 19912-040
+    </p>
+  </div>
+
+  <!-- ACTION BAR -->
+  <div class="act-bar">
+    <div class="act-title">TOQUE NOS ÍCONES PARA INTERAGIR</div>
+    <div class="act-grid">
+
+      <a href="https://maps.google.com/?q=R.+Amazonas+1119+Vila+Perino+Ourinhos+SP"
+         target="_blank" class="act-btn">
+        <div class="act-ico">📍</div>
+        <span class="act-lbl">COMO<br>CHEGAR</span>
+      </a>
+
+      <button class="act-btn" onclick="openModal('presModal')">
+        <div class="act-ico">✅</div>
+        <span class="act-lbl">CONFIRME<br>PRESENÇA</span>
+      </button>
+
+      <button class="act-btn" onclick="openModal('giftModal')">
+        <div class="act-ico">🎁</div>
+        <span class="act-lbl">LISTA DE<br>PRESENTES</span>
+      </button>
+
+      <a href="#" class="act-btn">
+        <div class="act-ico">🍽️</div>
+        <span class="act-lbl">LOCAL DA<br>FESTA</span>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- BOTTOM BOTANICAL -->
+  <div class="bio-bot">
+    <svg viewBox="0 0 430 65" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+      <g opacity=".8">
+        <ellipse cx="18"  cy="62" rx="34" ry="12" fill="#7aaf7a" transform="rotate(13 18 62)"/>
+        <ellipse cx="66"  cy="52" rx="28" ry="10" fill="#5d8a5d" transform="rotate(-17 66 52)"/>
+        <ellipse cx="5"   cy="47" rx="24" ry="8"  fill="#8fb98f" transform="rotate(36 5 47)"/>
+        <ellipse cx="114" cy="64" rx="32" ry="11" fill="#6a9e6a" transform="rotate(-7 114 64)"/>
+      </g>
+      <g opacity=".8">
+        <ellipse cx="412" cy="62" rx="34" ry="12" fill="#7aaf7a" transform="rotate(-13 412 62)"/>
+        <ellipse cx="364" cy="51" rx="28" ry="10" fill="#5d8a5d" transform="rotate(17 364 51)"/>
+        <ellipse cx="425" cy="46" rx="24" ry="8"  fill="#8fb98f" transform="rotate(-36 425 46)"/>
+        <ellipse cx="316" cy="64" rx="32" ry="11" fill="#6a9e6a" transform="rotate(7 316 64)"/>
+      </g>
+    </svg>
+  </div>
+
+</div><!-- /card -->
+</div><!-- /wrap -->
+
+
+<!-- ════ MODAL PRESENÇA ════ -->
+<div class="overlay" id="presModal" onclick="overlayClick(event,'presModal')">
+  <div class="modal">
+    <button class="m-close" onclick="closeModal('presModal')">✕</button>
+    <div id="pres-form">
+      <div class="m-icon">🌿</div>
+      <div class="m-title">Confirmar Presença</div>
+      <p class="m-sub">Ficamos felizes em tê-lo(a) conosco!</p>
+      <input type="text" id="presName" class="m-input" placeholder="Seu nome completo" maxlength="80"
+        onkeydown="if(event.key==='Enter')sendPresenca()"/>
+      <p class="m-err" id="presErr">Por favor, insira seu nome.</p>
+      <button class="m-btn" id="presBtn" onclick="sendPresenca()">CONFIRMAR PRESENÇA</button>
+    </div>
+    <div class="m-success" id="pres-ok">
+      <div class="s-ico">🎉</div>
+      <div class="s-title">Confirmado!</div>
+      <p class="s-msg" id="pres-ok-msg"></p>
+      <button class="s-close" onclick="closeModal('presModal')">FECHAR</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════ MODAL LISTA DE PRESENTES ════ -->
+<div class="overlay" id="giftModal" onclick="overlayClick(event,'giftModal')">
+  <div class="modal modal-gift">
+    <button class="m-close-banner" onclick="closeModal('giftModal')">✕</button>
+
+    <!-- BANNER 800×300 -->
+    <div class="gift-banner">
+      <img class="gift-banner-img" src="banner-presentes.jpeg" alt="Lista de Presentes"
+           onerror="this.style.display='none'">
+      <div class="gift-banner-fallback" id="bannerFallback">
+        <span>🎁</span>
+      </div>
+      <div class="gift-banner-overlay"></div>
+      <!-- paleta de cores decorativa -->
+      <div class="gift-banner-palette">
+        <span style="background:#3a5c3a"></span>
+        <span style="background:#8fb98f"></span>
+        <span style="background:#c9a96e"></span>
+        <span style="background:#f7f4ef"></span>
+      </div>
+      <div class="gift-banner-text">
+        <div class="gift-banner-title">Lista de Presentes</div>
+        <div class="gift-banner-sub">JOAB &amp; VALESKA · 21.06.2025</div>
+      </div>
+    </div>
+
+    <!-- CORPO DO MODAL -->
+    <div class="gift-modal-body">
+      <div id="gift-main">
+        <p class="m-sub" style="margin-top:4px">Selecione o(s) item(ns) que deseja presentear</p>
+
+        <p class="gift-counter" id="giftCounter">Nenhum item selecionado</p>
+
+        <ul class="gift-list" id="giftList">
+          <!-- preenchido pelo JS -->
+        </ul>
+
+        <p class="m-err" id="giftErr">Selecione ao menos 1 item.</p>
+        <p class="m-err" id="giftOutroErr" style="margin-top:-4px">Descreva o presente "Outro".</p>
+        <button class="m-btn" id="giftBtn" onclick="sendGift()">CONFIRMAR PRESENTE 🎁</button>
+      </div>
+
+      <!-- Success -->
+      <div class="m-success" id="gift-ok">
+        <div class="s-ico">💚</div>
+        <div class="s-title">Obrigado!</div>
+        <p class="s-msg" id="gift-ok-msg"></p>
+        <button class="s-close" onclick="closeModal('giftModal')">FECHAR</button>
+      </div>
+    </div><!-- /gift-modal-body -->
+  </div><!-- /modal -->
+</div><!-- /giftModal overlay -->
+
+
+<!-- ════ LIGHTBOX ════ -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <div class="lightbox-inner" onclick="event.stopPropagation()">
+    <img class="lightbox-img" id="lightboxImg" src="" alt="">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  </div>
+  <div class="lightbox-caption" id="lightboxCaption"></div>
+  <div class="lightbox-hint">toque em qualquer lugar para fechar</div>
+</div>
+
+
+<script>
+/* ════════════════════════════════════════════════════
+   ⚙️  CONFIGURAÇÃO — substitua com seus dados reais
+════════════════════════════════════════════════════ */
+const TG_TOKEN   = "8712842323:AAErIHvOAd1wXzllonjsHOU4xNmwS2BO2GE";     // token do @BotFather
+const TG_CHAT_ID = "-1003772617057";  // ID do grupo (-100...)
+
+/* ════════════════════════════════════════════════════
+   🎁  LISTA DE PRESENTES
+   ─────────────────────────────────────────────────
+   Cada item pode ter:
+     id     → número único
+     emoji  → ícone
+     name   → nome do presente
+     taken  → true = JÁ FOI DADO (fica desabilitado na lista)
+════════════════════════════════════════════════════ */
+const GIFTS = [
+  { id: 1,  emoji: "🧺", name: "Toalhas",                    photo: "01-toalhas.jpg",             taken: false },
+  { id: 2,  emoji: "🛏️", name: "Lençóis",                    photo: "02-lencois.jpeg",             taken: true },
+  { id: 3,  emoji: "🛌", name: "Colcha de cama",             photo: "03-colcha.jpeg",              taken: false },
+  { id: 4,  emoji: "🍴", name: "Talheres Tramontina",        photo: "04-talheres.jpeg",            taken: false },
+  { id: 5,  emoji: "🥛", name: "Copos",                      photo: "05-copos.jpeg",               taken: false },
+  { id: 6,  emoji: "🧲", name: "Ferro de passar",            photo: "06-ferro.jpeg",               taken: false },
+  { id: 7,  emoji: "🍳", name: "Conjunto de panela",         photo: "07-panelas.jpeg",             taken: false },
+  { id: 8,  emoji: "🍽️", name: "Aparelho de jantar",         photo: "08-aparelho-jantar.jpeg",     taken: false },
+  { id: 9,  emoji: "🍽️", name: "Conjuntos de pratos",        photo: "09-pratos.jpeg",              taken: false },
+  { id: 10, emoji: "🛋️", name: "Manta para sofá",            photo: "10-manta.jpeg",               taken: false },
+  { id: 11, emoji: "📱", name: "Mobi",                       photo: "fotos/11-mobi.jpg",                taken: false },
+  { id: 12, emoji: "🧴", name: "Kit de banheiro",            photo: "fotos/12-kit-banheiro.jpg",        taken: false },
+  { id: 13, emoji: "🥂", name: "Taças",                      photo: "fotos/13-tacas.jpg",               taken: false },
+  { id: 14, emoji: "🪟", name: "Cortinas",                   photo: "fotos/14-cortinas.jpg",            taken: false },
+  { id: 15, emoji: "🔪", name: "Faqueiro",                   photo: "fotos/15-faqueiro.jpg",            taken: false },
+  { id: 16, emoji: "🏺", name: "Jarras",                     photo: "fotos/16-jarras.jpg",              taken: false },
+  { id: 17, emoji: "🍟", name: "Airfryer",                   photo: "fotos/17-airfryer.jpg",            taken: false },
+  { id: 18, emoji: "🥣", name: "Batedeira",                  photo: "fotos/18-batedeira.jpg",           taken: false },
+  { id: 19, emoji: "🍊", name: "Espremedor de frutas",       photo: "fotos/19-espremedor.jpg",          taken: false },
+  { id: 20, emoji: "🧺", name: "Cesto de roupas",            photo: "fotos/20-cesto.jpg",               taken: false },
+  { id: 21, emoji: "🥣", name: "Tigelas",                    photo: "fotos/21-tigelas.jpg",             taken: false },
+  { id: 22, emoji: "🛏️", name: "Travesseiros",               photo: "fotos/22-travesseiros.jpg",        taken: false },
+  { id: 23, emoji: "🗑️", name: "Lixeira de inox",            photo: "fotos/23-lixeira.jpg",             taken: false },
+  { id: 24, emoji: "🍰", name: "Boleira",                    photo: "fotos/24-boleira.jpg",             taken: false },
+  { id: 25, emoji: "🥘", name: "Kit de travessas",           photo: "fotos/25-travessas.jpg",           taken: false },
+  { id: 26, emoji: "⏲️", name: "Panela de pressão",          photo: "fotos/26-panela-pressao.jpg",      taken: false }
+];
+
+/* ══ render gift list ══ */
+(function(){
+  const ul = document.getElementById('giftList');
+
+  /* itens normais */
+  GIFTS.forEach(g => {
+    const li = document.createElement('li');
+    li.className = 'gift-item' + (g.taken ? ' taken' : '');
+    li.dataset.id = g.id;
+
+    const imgTag = g.photo
+      ? `<img class="gift-img" src="${g.photo}" alt="${g.name}"
+             data-caption="${g.name}"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">`
+        + `<span class="gift-emoji" style="display:none">${g.emoji}</span>`
+      : `<span class="gift-emoji">${g.emoji}</span>`;
+
+    if(g.taken){
+      li.innerHTML =
+        `<input type="checkbox" disabled>` +
+        imgTag +
+        `<div class="gift-info"><span class="gift-name">${g.name}</span></div>` +
+        `<span class="taken-badge">Já presentiado</span>`;
+    } else {
+      li.innerHTML =
+        `<input type="checkbox" id="g${g.id}" value="${g.id}">` +
+        imgTag +
+        `<div class="gift-info"><label class="gift-name" for="g${g.id}">${g.name}</label></div>`;
+      const cb  = li.querySelector('input');
+      const img = li.querySelector('.gift-img');
+
+      /* clique na foto abre lightbox sem marcar o checkbox */
+      if(img){
+        img.addEventListener('click', e => {
+          e.stopPropagation();
+          openLightbox(g.photo, g.name);
+        });
+      }
+
+      li.addEventListener('click', e => {
+        if(e.target === img) return;          // já tratado acima
+        if(e.target !== cb) cb.checked = !cb.checked;
+        li.classList.toggle('checked', cb.checked);
+        updateCounter();
+      });
+      cb.addEventListener('change', () => {
+        li.classList.toggle('checked', cb.checked);
+        updateCounter();
+      });
+    }
+    ul.appendChild(li);
+  });
+
+  /* ── item OUTRO (sempre no final) ── */
+  const liOutro = document.createElement('li');
+  liOutro.className = 'gift-item gift-item-outro';
+  liOutro.id = 'giftItemOutro';
+  liOutro.innerHTML =
+    `<div class="gift-row">` +
+      `<input type="checkbox" id="gOutro">` +
+      `<span class="gift-emoji">✏️</span>` +
+      `<label class="gift-name" for="gOutro">Outro presente…</label>` +
+    `</div>` +
+    `<input type="text" id="gOutroText" class="gift-outro-input"` +
+      ` placeholder="Descreva o presente que irá trazer" maxlength="120">`;
+
+  const cbOutro   = liOutro.querySelector('#gOutro');
+  const txtOutro  = liOutro.querySelector('#gOutroText');
+
+  liOutro.addEventListener('click', e => {
+    if(e.target === txtOutro || e.target === cbOutro) return;
+    cbOutro.checked = !cbOutro.checked;
+    toggleOutro();
+  });
+  cbOutro.addEventListener('change', toggleOutro);
+
+  function toggleOutro(){
+    liOutro.classList.toggle('checked', cbOutro.checked);
+    txtOutro.style.display = cbOutro.checked ? 'block' : 'none';
+    if(cbOutro.checked) txtOutro.focus();
+    updateCounter();
+  }
+
+  ul.appendChild(liOutro);
+})();
+
+function updateCounter(){
+  const n  = document.querySelectorAll('#giftList input[type=checkbox]:not([disabled]):checked').length;
+  document.getElementById('giftCounter').textContent =
+    n === 0 ? 'Nenhum item selecionado'
+            : `${n} item${n>1?'s':''} selecionado${n>1?'s':''}`;
+}
+
+/* ── utils ── */
+function nowBR(){
+  return new Intl.DateTimeFormat('pt-BR',{
+    day:'2-digit',month:'2-digit',year:'numeric',
+    hour:'2-digit',minute:'2-digit',
+    timeZone:'America/Sao_Paulo'
+  }).format(new Date());
+}
+function getCount(k){
+  const n = parseInt(localStorage.getItem(k)||'0')+1;
+  localStorage.setItem(k,n); return String(n).padStart(2,'0');
+}
+
+/* ── modal control ── */
+function openModal(id){
+  document.getElementById(id).classList.add('open');
+  if(id==='presModal'){
+    document.getElementById('presName').value='';
+    document.getElementById('presErr').style.display='none';
+    document.getElementById('pres-form').style.display='block';
+    document.getElementById('pres-ok').style.display='none';
+    setTimeout(()=>document.getElementById('presName').focus(),320);
+  }
+  if(id==='giftModal') resetGiftModal();
+}
+function closeModal(id){ document.getElementById(id).classList.remove('open') }
+function overlayClick(e,id){ if(e.target===document.getElementById(id)) closeModal(id) }
+
+/* ── PRESENÇA ── */
+async function sendPresenca(){
+  const el   = document.getElementById('presName');
+  const name = el.value.trim();
+  if(!name){ document.getElementById('presErr').style.display='block'; el.focus(); return; }
+  document.getElementById('presErr').style.display='none';
+
+  const btn = document.getElementById('presBtn');
+  btn.disabled=true; btn.textContent='ENVIANDO…';
+
+  const num=getCount('ae_pres'), dt=nowBR();
+  await tgSend(
+    `🌿 *Confirmação de Presença* 🌿\n` +
+    `━━━━━━━━━━━━━━━━━━━━━\n` +
+    `*${num}* - ${name} confirmou presença ✅\n` +
+    `📅 ${dt}\n` +
+    `━━━━━━━━━━━━━━━━━━━━━\n` +
+    `_Casamento Arianne & Eduardo — 21/06/2025_`
+  );
+
+  btn.disabled=false; btn.textContent='CONFIRMAR PRESENÇA';
+  document.getElementById('pres-form').style.display='none';
+  document.getElementById('pres-ok').style.display='flex';
+  document.getElementById('pres-ok-msg').innerHTML =
+    `<strong>${name}</strong>, presença confirmada com sucesso! 💚<br><br>` +
+    `Esperamos por você no nosso grande dia.<br>` +
+    `<span style="font-size:11px;color:#999">Nº ${num} · ${dt}</span>`;
+}
+
+/* ── PRESENTES ── */
+async function sendGift(){
+  const errEl     = document.getElementById('giftErr');
+  const errOutro  = document.getElementById('giftOutroErr');
+  errEl.style.display = 'none';
+  errOutro.style.display = 'none';
+
+  /* itens da lista */
+  const checked = [...document.querySelectorAll('#giftList input[type=checkbox]:not([disabled]):checked')];
+
+  if(!checked.length){
+    errEl.style.display='block'; return;
+  }
+
+  /* valida "Outro" se marcado */
+  const cbOutro  = document.getElementById('gOutro');
+  const txtOutro = document.getElementById('gOutroText');
+  if(cbOutro.checked && !txtOutro.value.trim()){
+    errOutro.style.display='block'; txtOutro.focus(); return;
+  }
+
+  /* monta lista de itens */
+  const lines = checked.map(cb => {
+    if(cb.id === 'gOutro'){
+      return `  ✏️ ${txtOutro.value.trim()} _(personalizado)_`;
+    }
+    const g = GIFTS.find(x => x.id === parseInt(cb.value));
+    return `  ${g.emoji} ${g.name}`;
+  }).join('\n');
+
+  const btn = document.getElementById('giftBtn');
+  btn.disabled=true; btn.textContent='ENVIANDO…';
+
+  const num=getCount('ae_gift'), dt=nowBR();
+  await tgSend(
+    `🎁 *Lista de Presentes* 🎁\n` +
+    `━━━━━━━━━━━━━━━━━━━━━\n` +
+    `*${num}* - Presente(s) escolhido(s):\n\n${lines}\n\n` +
+    `📅 ${dt}\n` +
+    `━━━━━━━━━━━━━━━━━━━━━\n` +
+    `_Casamento Arianne & Eduardo — 21/06/2025_`
+  );
+
+  btn.disabled=false; btn.textContent='CONFIRMAR PRESENTE 🎁';
+
+  /* sucesso */
+  const nomes = checked.map(cb => {
+    if(cb.id==='gOutro') return `✏️ ${txtOutro.value.trim()}`;
+    const g=GIFTS.find(x=>x.id===parseInt(cb.value));
+    return `${g.emoji} ${g.name}`;
+  }).join('<br>');
+
+  document.getElementById('gift-main').style.display='none';
+  document.getElementById('gift-ok').style.display='flex';
+  document.getElementById('gift-ok-msg').innerHTML =
+    `Que presente incrível! 🥂<br><br>${nomes}<br><br>` +
+    `<span style="font-size:11px;color:#999">Nº ${num} · ${dt}</span>`;
+}
+
+function resetGiftModal(){
+  document.querySelectorAll('#giftList input[type=checkbox]').forEach(cb=>{
+    cb.checked=false; cb.closest('li').classList.remove('checked');
+  });
+  const t=document.getElementById('gOutroText');
+  if(t){ t.value=''; t.style.display='none'; }
+  updateCounter();
+  ['giftErr','giftOutroErr'].forEach(id=>document.getElementById(id).style.display='none');
+  document.getElementById('gift-main').style.display='block';
+  document.getElementById('gift-ok').style.display='none';
+}
+
+/* ── LIGHTBOX ── */
+function openLightbox(src, caption){
+  const lb  = document.getElementById('lightbox');
+  const img = document.getElementById('lightboxImg');
+  const cap = document.getElementById('lightboxCaption');
+  img.src = src;
+  cap.textContent = caption;
+  lb.classList.add('open');
+  document.addEventListener('keydown', _lbKey);
+}
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('open');
+  document.removeEventListener('keydown', _lbKey);
+}
+function _lbKey(e){ if(e.key === 'Escape') closeLightbox(); }
+
+/* ── Telegram ── */
+async function tgSend(text){
+  try{
+    await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({chat_id:TG_CHAT_ID,text,parse_mode:'Markdown'})
+    });
+  }catch(e){console.warn('TG:',e)}
+}
+</script>
+</body>
+</html>
