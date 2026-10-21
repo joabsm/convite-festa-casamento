@@ -551,6 +551,86 @@ body{
   .act-lbl{font-size:6.5px;letter-spacing:.4px}
 }
 
+
+/* ════ ONBOARDING / TOUR GUIADO ════ */
+.act-bar{position:relative}
+.tour-help{
+  position:absolute;top:8px;right:10px;
+  width:24px;height:24px;border-radius:50%;
+  border:1.5px solid #c2a66f;background:#fffdf8;color:var(--g-dark);
+  font-family:'Cinzel',serif;font-size:12px;font-weight:600;line-height:1;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 6px rgba(37,76,58,.18);
+  transition:transform .2s,background .2s;
+}
+.tour-help:hover{background:var(--g-pale);transform:scale(1.1)}
+
+.tour{position:fixed;inset:0;z-index:2000;display:none}
+.tour.on{display:block}
+.tour-spot{
+  position:fixed;border-radius:18px;pointer-events:none;
+  box-shadow:0 0 0 9999px rgba(22,39,28,.74);
+  transition:top .4s cubic-bezier(.4,0,.2,1),left .4s cubic-bezier(.4,0,.2,1),
+             width .4s cubic-bezier(.4,0,.2,1),height .4s cubic-bezier(.4,0,.2,1);
+}
+.tour-spot::after{
+  content:"";position:absolute;inset:-5px;border-radius:inherit;
+  border:2px solid var(--gold);
+  animation:tourPulse 1.8s ease-out infinite;
+}
+.tour-spot.none::after{display:none}
+@keyframes tourPulse{0%{opacity:.95;transform:scale(.96)}100%{opacity:0;transform:scale(1.14)}}
+
+.tour-pop{
+  position:fixed;width:min(310px,calc(100vw - 24px));
+  background:#fbf8f1;
+  border:1px solid rgba(185,154,97,.6);border-radius:16px;
+  padding:20px 18px 14px;text-align:center;
+  box-shadow:0 22px 60px rgba(0,0,0,.38);
+  opacity:0;transform:translateY(8px);
+  transition:opacity .25s,transform .25s,top .4s cubic-bezier(.4,0,.2,1),left .4s cubic-bezier(.4,0,.2,1);
+}
+.tour-pop.show{opacity:1;transform:none}
+.tour-arrow{
+  position:absolute;width:14px;height:14px;background:#fbf8f1;
+  border:1px solid rgba(185,154,97,.6);transform:rotate(45deg);
+}
+.tour-pop[data-pos="top"] .tour-arrow{bottom:-8px;border-top:none;border-left:none}
+.tour-pop[data-pos="bottom"] .tour-arrow{top:-8px;border-bottom:none;border-right:none}
+.tour-pop[data-pos="center"] .tour-arrow{display:none}
+
+.tour-x{
+  position:absolute;top:8px;right:12px;background:none;border:none;
+  font-size:16px;line-height:1;color:var(--txt2);cursor:pointer;padding:4px;
+}
+.tour-emoji{font-size:28px;line-height:1;margin-bottom:4px}
+.tour-title{font-family:'Dancing Script',cursive;font-size:25px;color:var(--g-dark);line-height:1.15;margin-bottom:5px}
+.tour-text{font-size:14px;color:var(--txt2);line-height:1.5;font-style:italic;margin-bottom:14px}
+.tour-foot{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.tour-dots{display:flex;align-items:center;gap:5px}
+.tour-dots i{width:6px;height:6px;border-radius:50%;background:var(--g-pale);transition:all .25s}
+.tour-dots i.on{background:var(--g-dark);width:16px;border-radius:4px}
+.tour-btns{display:flex;gap:6px}
+.tour-btn{
+  padding:8px 13px;border:1px solid transparent;border-radius:9px;
+  font-family:'Cinzel',serif;font-size:10px;letter-spacing:1.4px;font-weight:600;cursor:pointer;
+  background:linear-gradient(135deg,#315c43,#244631);color:#fff;
+  box-shadow:0 4px 12px rgba(37,76,58,.22);
+  transition:transform .1s,background .2s;
+}
+.tour-btn:active{transform:scale(.96)}
+.tour-btn:focus{outline:none}
+.tour-btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.tour-btn.ghost{background:transparent;color:var(--g-dark);box-shadow:none;border-color:#d4dfce}
+.tour-skip{
+  margin-top:10px;background:none;border:none;cursor:pointer;
+  font-family:'Cormorant Garamond',serif;font-size:12.5px;color:#8a8a80;text-decoration:underline;
+}
+@media (prefers-reduced-motion:reduce){
+  .tour-spot,.tour-pop{transition:none}
+  .tour-spot::after{animation:none}
+}
+
 </style>
 </head>
 <body>
@@ -629,6 +709,7 @@ body{
   <!-- ACTION BAR -->
   <div class="act-bar">
     <div class="act-title">TOQUE NOS ÍCONES PARA INTERAGIR</div>
+    <button class="tour-help" id="tourHelp" type="button" aria-label="Ver tutorial do convite" title="Ver tutorial" onclick="startTour()">?</button>
     <div class="act-grid">
 
       <a href="https://maps.app.goo.gl/H7RUqTD7LybtuK5XA"
@@ -1059,5 +1140,159 @@ async function tgSend(text){
   }catch(e){console.warn('TG:',e)}
 }
 </script>
+
+<!-- ════ ONBOARDING: TOUR GUIADO ════ -->
+<div class="tour" id="tour" aria-hidden="true">
+  <div class="tour-spot none" id="tourSpot"></div>
+  <div class="tour-pop" id="tourPop" role="dialog" aria-modal="true" aria-labelledby="tourTitle" data-pos="center">
+    <span class="tour-arrow" id="tourArrow"></span>
+    <button class="tour-x" id="tourX" aria-label="Fechar tutorial">✕</button>
+    <div class="tour-emoji" id="tourEmoji"></div>
+    <div class="tour-title" id="tourTitle"></div>
+    <p class="tour-text" id="tourText"></p>
+    <div class="tour-foot">
+      <div class="tour-dots" id="tourDots" aria-hidden="true"></div>
+      <div class="tour-btns">
+        <button class="tour-btn ghost" id="tourPrev">VOLTAR</button>
+        <button class="tour-btn" id="tourNext">PRÓXIMO</button>
+      </div>
+    </div>
+    <button class="tour-skip" id="tourSkip">Pular tutorial</button>
+  </div>
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════
+   🧭  ONBOARDING — TOUR GUIADO DOS ÍCONES
+   • Abre sozinho na 1ª visita (salvo em localStorage)
+   • Botão "?" na barra de ações reabre o tour
+   • Para editar os textos, altere o array STEPS abaixo
+     (target = posição do ícone: 0 a 3; sem target = tela central)
+════════════════════════════════════════════════════ */
+(function(){
+  const KEY = 'convite_tour_v1';
+  const STEPS = [
+    { emoji:'💌', title:'Bem-vindo(a) ao nosso convite!',
+      text:'Preparamos um tour rápido para você aproveitar tudo por aqui. Leva menos de 20 segundos.',
+      btn:'COMEÇAR' },
+    { target:0, emoji:'📍', title:'Como chegar',
+      text:'Abre o mapa com a rota até o local da festa. É só tocar e seguir o GPS.' },
+    { target:1, emoji:'✅', title:'Confirme sua presença',
+      text:'Digite seu nome e pronto! A confirmação chega direto para nós. Fazemos questão de ter você conosco.' },
+    { target:2, emoji:'🎁', title:'Lista de presentes',
+      text:'Quer nos presentear? Escolha um ou mais itens da lista. Os que já foram escolhidos ficam indisponíveis.' },
+    { target:3, emoji:'🍽️', title:'Local da festa',
+      text:'Dê uma espiadinha no espaço onde vamos celebrar. Abre no Instagram.' }
+  ];
+
+  const $ = id => document.getElementById(id);
+  const root = $('tour'), spot = $('tourSpot'), pop = $('tourPop'), arrow = $('tourArrow');
+  const dotsEl = $('tourDots'), btnPrev = $('tourPrev'), btnNext = $('tourNext'), btnSkip = $('tourSkip');
+  let i = 0, active = false;
+
+  const seen = () => { try{ return localStorage.getItem(KEY) === '1' }catch(e){ return false } };
+  const markDone = () => { try{ localStorage.setItem(KEY,'1') }catch(e){} };
+  const targets = () => document.querySelectorAll('.act-grid .act-btn');
+
+  dotsEl.innerHTML = STEPS.map(() => '<i></i>').join('');
+
+  function place(){
+    const s = STEPS[i], vw = innerWidth, vh = innerHeight, m = 12;
+    const pw = pop.offsetWidth, ph = pop.offsetHeight;
+    const el = s.target != null ? targets()[s.target] : null;
+
+    if(!el){
+      spot.classList.add('none');
+      spot.style.top = (vh/2)+'px'; spot.style.left = (vw/2)+'px';
+      spot.style.width = '0px';     spot.style.height = '0px';
+      pop.dataset.pos = 'center';
+      pop.style.top  = Math.max(m,(vh-ph)/2)+'px';
+      pop.style.left = Math.max(m,(vw-pw)/2)+'px';
+      return;
+    }
+
+    const r = el.getBoundingClientRect(), pad = 7, gap = 16;
+    spot.classList.remove('none');
+    spot.style.top    = (r.top - pad)+'px';
+    spot.style.left   = (r.left - pad)+'px';
+    spot.style.width  = (r.width + pad*2)+'px';
+    spot.style.height = (r.height + pad*2)+'px';
+
+    const above = r.top - pad - gap - m;
+    const below = vh - (r.bottom + pad) - gap - m;
+    const pos = (above >= ph || above >= below) ? 'top' : 'bottom';
+    let top = pos === 'top' ? r.top - pad - gap - ph : r.bottom + pad + gap;
+    top = Math.max(m, Math.min(top, vh - ph - m));
+    let left = r.left + r.width/2 - pw/2;
+    left = Math.max(m, Math.min(left, vw - pw - m));
+
+    pop.dataset.pos = pos;
+    pop.style.top = top+'px';
+    pop.style.left = left+'px';
+    const ax = Math.max(22, Math.min(pw - 22, r.left + r.width/2 - left));
+    arrow.style.left = (ax - 7)+'px';
+  }
+
+  function render(){
+    const s = STEPS[i], last = i === STEPS.length - 1;
+    $('tourEmoji').textContent = s.emoji;
+    $('tourTitle').textContent = s.title;
+    $('tourText').textContent  = s.text;
+    dotsEl.querySelectorAll('i').forEach((d,k) => d.classList.toggle('on', k === i));
+    btnPrev.style.display = i === 0 ? 'none' : '';
+    btnSkip.style.display = last ? 'none' : '';
+    btnNext.textContent   = s.btn || (last ? 'CONCLUIR' : 'PRÓXIMO');
+    place();
+    btnNext.focus({preventScroll:true});
+  }
+
+  function go(n){ i = Math.max(0, Math.min(STEPS.length - 1, n)); render(); }
+
+  function start(){
+    if(active) return;
+    active = true; i = 0;
+    root.classList.add('on'); root.setAttribute('aria-hidden','false');
+    pop.style.transition = 'none'; spot.style.transition = 'none';
+    render();
+    void pop.offsetWidth;
+    pop.style.transition = ''; spot.style.transition = '';
+    pop.classList.add('show');
+  }
+
+  function end(){
+    if(!active) return;
+    active = false; markDone();
+    pop.classList.remove('show');
+    root.classList.remove('on'); root.setAttribute('aria-hidden','true');
+    const h = $('tourHelp'); if(h) h.focus({preventScroll:true});
+  }
+
+  btnNext.addEventListener('click', () => (i === STEPS.length - 1) ? end() : go(i + 1));
+  btnPrev.addEventListener('click', () => go(i - 1));
+  btnSkip.addEventListener('click', end);
+  $('tourX').addEventListener('click', end);
+
+  document.addEventListener('keydown', e => {
+    if(!active) return;
+    if(e.key === 'Escape')          end();
+    else if(e.key === 'ArrowRight') (i === STEPS.length - 1) ? end() : go(i + 1);
+    else if(e.key === 'ArrowLeft')  go(i - 1);
+  });
+
+  addEventListener('resize', () => { if(active) place() });
+  addEventListener('orientationchange', () => { if(active) setTimeout(place,250) });
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if(active) place() });
+
+  window.startTour = start;
+
+  addEventListener('load', () => {
+    if(seen()) return;
+    setTimeout(() => {
+      if(!document.querySelector('.overlay.open, .lightbox.open')) start();
+    }, 1400);
+  });
+})();
+</script>
+
 </body>
 </html>
