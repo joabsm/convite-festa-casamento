@@ -395,6 +395,162 @@ html,body{
 .gift-outro-input:focus{border-color:var(--g-mid);box-shadow:0 0 0 3px rgba(93,138,93,.15)}
 .gift-item-outro{flex-direction:column;align-items:flex-start}
 .gift-item-outro .gift-row{display:flex;align-items:center;gap:9px;width:100%}
+
+/* ===== REFINAMENTO VISUAL — preserva textos, links e funcionalidades ===== */
+:root{
+  --g-dark:#254c3a;
+  --g-mid:#547c62;
+  --g-light:#a9c5a8;
+  --g-pale:#dce8d8;
+  --cream:#fbf8f1;
+  --txt:#292d29;
+  --txt2:#686b62;
+  --gold:#b99a61;
+}
+html,body{background:#e8e6dd}
+body{
+  background:
+    radial-gradient(ellipse at 8% 12%,rgba(169,197,168,.32),transparent 34%),
+    radial-gradient(ellipse at 92% 88%,rgba(185,154,97,.18),transparent 30%),
+    #e8e6dd;
+}
+.wrap{padding:clamp(10px,2.5vw,24px)}
+.card{
+  max-width:450px;
+  max-height:860px;
+  border:1px solid rgba(185,154,97,.42);
+  border-radius:18px;
+  background:linear-gradient(145deg,#fffdf8 0%,var(--cream) 72%,#f4f0e6 100%);
+  box-shadow:0 24px 70px rgba(38,55,41,.20),0 0 0 5px rgba(255,255,255,.28);
+  position:relative;
+}
+.card:before{
+  content:"";
+  position:absolute;inset:9px;
+  border:1px solid rgba(185,154,97,.36);
+  border-radius:12px;pointer-events:none;z-index:2;
+}
+.bio-top{
+  height:clamp(86px,16vh,126px);
+  background:linear-gradient(135deg,#a8c7a5 0%,#e0ead8 55%,#fbf8f1 100%);
+}
+.bio-top:after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,rgba(37,76,58,.05),transparent 25%,transparent 75%,rgba(37,76,58,.05));
+}
+.body{padding:4px clamp(23px,6vw,34px);gap:clamp(5px,1.1vh,11px)}
+.mono{
+  font-size:clamp(30px,7vw,43px);
+  letter-spacing:8px;color:#343d33;
+  text-shadow:0 2px 0 rgba(255,255,255,.8);
+}
+.mono svg{color:var(--gold);width:20px;height:20px}
+.quote{
+  font-size:clamp(11px,2.55vw,13px);
+  color:#555b51;line-height:1.6;
+  border-top:1px solid rgba(185,154,97,.7);
+  border-bottom:1px solid rgba(185,154,97,.7);
+  padding:8px 7px;margin:0;
+}
+.quote span{color:var(--g-dark);letter-spacing:1px}
+.bless{
+  font-size:clamp(11px,2.5vw,13px);
+  color:#777365;letter-spacing:.7px;
+}
+.names{
+  font-size:clamp(34px,8.5vw,51px);
+  color:var(--g-dark);line-height:1.05;
+  text-shadow:0 1px 0 #fff;
+}
+.names em{color:var(--gold);filter:drop-shadow(0 1px 1px rgba(185,154,97,.18))}
+.invite{font-size:clamp(12px,2.6vw,14px);color:#62645c;letter-spacing:.3px}
+.invite strong{
+  font-size:clamp(14px,3.5vw,18px);
+  letter-spacing:5px;color:var(--g-dark);margin-top:4px;
+}
+.date-wrap{
+  width:100%;max-width:330px;margin:0 auto;
+  padding:7px 10px 8px;
+  border-top:1px solid rgba(185,154,97,.45);
+  border-bottom:1px solid rgba(185,154,97,.45);
+}
+.day-lbl{color:#797565;letter-spacing:4px}
+.date-row hr{border-top:1px solid rgba(185,154,97,.62)}
+.date-m,.date-y{color:#53594e;letter-spacing:2px}
+.date-n{
+  color:var(--g-dark);font-size:clamp(40px,9vw,56px);
+  text-shadow:0 2px 0 rgba(255,255,255,.9);
+}
+.date-time{color:var(--g-dark);letter-spacing:3px;margin-top:4px}
+.addr{color:#62645c;line-height:1.55}
+.act-bar{
+  background:linear-gradient(180deg,#f0eee5 0%,#e7e9dc 100%);
+  border-top:1px solid rgba(185,154,97,.48);
+  padding:12px 10px 13px;
+}
+.act-title{color:#777565;letter-spacing:2.2px;margin-bottom:10px}
+.act-grid{gap:clamp(10px,3vw,22px)}
+.act-btn{min-width:58px}
+.act-ico{
+  width:clamp(44px,10vw,54px);height:clamp(44px,10vw,54px);
+  background:linear-gradient(145deg,#6d9473,#3f6a4d);
+  border:1.5px solid #c2a66f;
+  color:white;box-shadow:0 5px 12px rgba(37,76,58,.2);
+}
+.act-btn:hover .act-ico{background:linear-gradient(145deg,#789e7d,#31573e)}
+.act-lbl{color:#384438;letter-spacing:.7px}
+.bio-bot{
+  height:clamp(42px,7vh,59px);
+  background:linear-gradient(to top,#a8c7a5 0%,#d9e6d3 62%,transparent 100%);
+}
+.overlay{background:rgba(22,39,28,.64);backdrop-filter:blur(7px)}
+.modal{
+  border:1px solid rgba(185,154,97,.55);
+  border-radius:16px;
+  background:linear-gradient(145deg,#fffdf8,#f8f5ec);
+  box-shadow:0 25px 70px rgba(0,0,0,.32);
+}
+.m-title,.s-title{color:var(--g-dark)}
+.m-input,.gift-outro-input{
+  border:1px solid #d4dfce;border-radius:9px;background:#fffefa;
+}
+.m-input:focus,.gift-outro-input:focus{
+  border-color:var(--g-mid);box-shadow:0 0 0 3px rgba(84,124,98,.14)
+}
+.m-btn,.s-close{
+  border-radius:9px;
+  background:linear-gradient(135deg,#315c43,#244631);
+  box-shadow:0 5px 15px rgba(37,76,58,.2);
+}
+.m-btn:hover{background:linear-gradient(135deg,#527c5d,#315c43)}
+.gift-item{
+  border:1px solid #dce5d5;border-radius:10px;background:rgba(255,255,255,.64);
+  padding:10px 11px;
+}
+.gift-item:hover{background:#f0f5ec}
+.gift-item.checked{background:#e7f0e4;border-color:#7fa383}
+.gift-img{border-radius:9px;border:1px solid #d6e0d0}
+.gift-banner{border-radius:15px 15px 0 0}
+.gift-banner-title{font-size:25px}
+.gift-modal-body{padding:16px 22px 22px}
+.lightbox{background:rgba(13,26,17,.94)}
+@media(max-height:700px){
+  .body{gap:4px;padding-top:0;padding-bottom:0}
+  .quote{padding:5px;font-size:10px}
+  .date-wrap{padding:4px 8px}
+  .act-bar{padding:7px 8px}
+  .bio-top{height:clamp(64px,11vh,82px)}
+  .bio-bot{height:38px}
+}
+@media(max-width:360px){
+  .wrap{padding:5px}
+  .card{border-radius:13px}
+  .card:before{inset:6px}
+  .body{padding-left:17px;padding-right:17px}
+  .act-grid{gap:7px}
+  .act-lbl{font-size:6.5px;letter-spacing:.4px}
+}
+
 </style>
 </head>
 <body>
@@ -566,7 +722,7 @@ html,body{
       </div>
       <div class="gift-banner-text">
         <div class="gift-banner-title">Lista de Presentes</div>
-        <div class="gift-banner-sub">JOAB &amp; VALESKA · 21.06.2025</div>
+        <div class="gift-banner-sub">JOAB &amp; VALESKA · 22.11.2026</div>
       </div>
     </div>
 
@@ -627,7 +783,7 @@ const TG_CHAT_ID = "-1003772617057";  // ID do grupo (-100...)
 ════════════════════════════════════════════════════ */
 const GIFTS = [
   { id: 1,  emoji: "🧺", name: "Toalhas",                    photo: "01-toalhas.jpg",             taken: false },
-  { id: 2,  emoji: "🛏️", name: "Lençóis",                    photo: "02-lencois.jpeg",             taken: true },
+  { id: 2,  emoji: "🛏️", name: "Lençóis",                    photo: "02-lencois.jpeg",             taken: false },
   { id: 3,  emoji: "🛌", name: "Colcha de cama",             photo: "03-colcha.jpeg",              taken: false },
   { id: 4,  emoji: "🍴", name: "Talheres Tramontina",        photo: "04-talheres.jpeg",            taken: false },
   { id: 5,  emoji: "🥛", name: "Copos",                      photo: "05-copos.jpeg",               taken: false },
