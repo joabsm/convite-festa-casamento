@@ -886,20 +886,40 @@ const GIFTS = [
   { id: 21, emoji: "🥣", name: "Tigelas",                    photo: "21-tigelas.jpeg",             taken: false },
   { id: 22, emoji: "🛏️", name: "Travesseiros",               photo: "22-travesseiros.jpg",        taken: false },
   { id: 23, emoji: "🗑️", name: "Lixeira de inox",            photo: "23-lixeira.jpeg",             taken: false },
-  { id: 24, emoji: "🍰", name: "Boleira",                    photo: "24-boleira.jpeg",             taken: false },
+  { id: 24, emoji: "🍰", name: "Boleira",                    photo: "24-boleira.jpeg",             taken: true },
   { id: 25, emoji: "🥘", name: "Kit de travessas",           photo: "25-travessas.jpeg",           taken: false },
   { id: 26, emoji: "⏲️", name: "Panela de pressão",          photo: "26-panela-pressao.jpeg",      taken: false },
   { id: 27, emoji: "🥄", name: "Kit com utensílios ",        photo: "27-kit-utensilios.jpeg",      taken: false }
 ];
 
+/* ══ presentes escolhidos neste navegador ══
+   Mantém os itens selecionados indisponíveis após recarregar a página.
+   Para marcar manualmente, continue usando taken: true/false em GIFTS.
+   Observação: localStorage funciona apenas neste navegador/dispositivo.
+══════════════════════════════════════════════ */
+const AUTO_TAKEN_KEY = 'convite_presentes_escolhidos_v1';
+function getAutoTaken(){
+  try {
+    const ids = JSON.parse(localStorage.getItem(AUTO_TAKEN_KEY) || '[]');
+    return new Set(Array.isArray(ids) ? ids.map(Number) : []);
+  } catch(e) { return new Set(); }
+}
+function saveAutoTaken(ids){
+  try { localStorage.setItem(AUTO_TAKEN_KEY, JSON.stringify([...ids])); }
+  catch(e) { console.warn('Não foi possível salvar os presentes neste navegador:', e); }
+}
+function isGiftTaken(g){ return g.taken === true || getAutoTaken().has(Number(g.id)); }
+
 /* ══ render gift list ══ */
 (function(){
   const ul = document.getElementById('giftList');
+  const autoTaken = getAutoTaken();
 
   /* itens normais */
   GIFTS.forEach(g => {
     const li = document.createElement('li');
-    li.className = 'gift-item' + (g.taken ? ' taken' : '');
+    const taken = g.taken === true || autoTaken.has(Number(g.id));
+    li.className = 'gift-item' + (taken ? ' taken' : '');
     li.dataset.id = g.id;
 
     const imgTag = g.photo
@@ -909,7 +929,7 @@ const GIFTS = [
         + `<span class="gift-emoji" style="display:none">${g.emoji}</span>`
       : `<span class="gift-emoji">${g.emoji}</span>`;
 
-    if(g.taken){
+    if(taken){
       li.innerHTML =
         `<input type="checkbox" disabled>` +
         imgTag +
@@ -1075,6 +1095,14 @@ async function sendGift(){
   const btn = document.getElementById('giftBtn');
   btn.disabled=true; btn.textContent='ENVIANDO…';
 
+  /* Guarda automaticamente os presentes selecionados neste navegador.
+     O item personalizado 'Outro' não corresponde a um produto da lista. */
+  const autoTaken = getAutoTaken();
+  checked.forEach(cb => {
+    if(cb.id !== 'gOutro') autoTaken.add(Number(cb.value));
+  });
+  saveAutoTaken(autoTaken);
+
   const num=getCount('ae_gift'), dt=nowBR();
   await tgSend(
     `🎁 *Lista de Presentes* 🎁\n` +
@@ -1086,6 +1114,24 @@ async function sendGift(){
   );
 
   btn.disabled=false; btn.textContent='CONFIRMAR PRESENTE 🎁';
+
+  /* Atualiza a lista visualmente para exibir os itens como indisponíveis. */
+  checked.forEach(cb => {
+    if(cb.id === 'gOutro') return;
+    const li = cb.closest('li');
+    const g = GIFTS.find(x => x.id === Number(cb.value));
+    if(!li || !g) return;
+    li.classList.remove('checked');
+    li.classList.add('taken');
+    li.innerHTML =
+      `<input type="checkbox" disabled>` +
+      (g.photo
+        ? `<img class="gift-img" src="${g.photo}" alt="${g.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">` +
+          `<span class="gift-emoji" style="display:none">${g.emoji}</span>`
+        : `<span class="gift-emoji">${g.emoji}</span>`) +
+      `<div class="gift-info"><span class="gift-name">${g.name}</span></div>` +
+      `<span class="taken-badge">Já presentiado</span>`;
+  });
 
   /* sucesso */
   const nomes = checked.map(cb => {
