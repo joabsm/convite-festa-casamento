@@ -828,6 +828,7 @@ body{
         <div class="s-ico">💚</div>
         <div class="s-title">Obrigado!</div>
         <p class="s-msg" id="gift-ok-msg"></p>
+        <button class="m-btn" id="saveGiftImageBtn" onclick="saveGiftAsImage()">📷 SALVAR MEU PRESENTE ESCOLHIDO</button>
         <button class="s-close" onclick="closeModal('giftModal')">FECHAR</button>
       </div>
     </div><!-- /gift-modal-body -->
@@ -1062,6 +1063,9 @@ async function sendPresenca(){
     `<span style="font-size:11px;color:#999">Nº ${num} · ${dt}</span>`;
 }
 
+/* ── COMPROVANTE VISUAL DO PRESENTE ── */
+let lastGiftReceipt = null;
+
 /* ── PRESENTES ── */
 async function sendGift(){
   const errEl     = document.getElementById('giftErr');
@@ -1104,6 +1108,12 @@ async function sendGift(){
   saveAutoTaken(autoTaken);
 
   const num=getCount('ae_gift'), dt=nowBR();
+  const chosenItems = checked.map(cb => {
+    if(cb.id === 'gOutro') return `✏️ ${txtOutro.value.trim()}`;
+    const gift = GIFTS.find(x => x.id === Number(cb.value));
+    return gift ? `${gift.emoji} ${gift.name}` : '';
+  }).filter(Boolean);
+  lastGiftReceipt = { number: num, dateTime: dt, items: chosenItems };
   await tgSend(
     `🎁 *Lista de Presentes* 🎁\n` +
     `━━━━━━━━━━━━━━━━━━━━━\n` +
@@ -1145,6 +1155,117 @@ async function sendGift(){
   document.getElementById('gift-ok-msg').innerHTML =
     `Que presente incrível! 🥂<br><br>${nomes}<br><br>` +
     `<span style="font-size:11px;color:#999">Nº ${num} · ${dt}</span>`;
+}
+
+function saveGiftAsImage(){
+  if(!lastGiftReceipt || !lastGiftReceipt.items || !lastGiftReceipt.items.length){
+    alert('Confirme um presente primeiro para gerar a imagem.');
+    return;
+  }
+
+  const canvas = document.createElement('canvas');
+  const items = lastGiftReceipt.items;
+  canvas.width = 1080;
+  canvas.height = Math.max(1350, 950 + items.length * 105);
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+
+  // Fundo e moldura em estilo elegante, combinando com o convite.
+  const bg = ctx.createLinearGradient(0, 0, W, H);
+  bg.addColorStop(0, '#fffdf8');
+  bg.addColorStop(1, '#edf2e8');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+  ctx.strokeStyle = '#b99a61';
+  ctx.lineWidth = 4;
+  ctx.strokeRect(34, 34, W - 68, H - 68);
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(52, 52, W - 104, H - 104);
+
+  // Detalhes decorativos discretos.
+  ctx.fillStyle = 'rgba(84,124,98,.12)';
+  ctx.beginPath(); ctx.arc(75, 85, 95, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(W - 65, H - 75, 115, 0, Math.PI * 2); ctx.fill();
+
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#315c43';
+  ctx.font = 'bold 34px Georgia, serif';
+  ctx.fillText('COMPROVANTE DE PRESENTE', W / 2, 145);
+  ctx.fillStyle = '#b99a61';
+  ctx.fillRect(250, 177, 580, 3);
+
+  ctx.fillStyle = '#254c3a';
+  ctx.font = 'bold 66px Georgia, serif';
+  ctx.fillText('Joab & Valeska', W / 2, 275);
+  ctx.fillStyle = '#686b62';
+  ctx.font = '30px Georgia, serif';
+  ctx.fillText('Casamento · 22 de novembro de 2026', W / 2, 330);
+  ctx.font = '28px Georgia, serif';
+  ctx.fillText('Almoço às 12h00', W / 2, 375);
+
+  ctx.fillStyle = '#315c43';
+  ctx.font = 'bold 32px Georgia, serif';
+  ctx.fillText('PRESENTE ESCOLHIDO', W / 2, 465);
+
+  let y = 525;
+  const maxWidth = 800;
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#292d29';
+  ctx.font = '30px Georgia, serif';
+  const wrapText = (text, x, startY, maxW, lineH) => {
+    const words = text.split(/\s+/);
+    let line = '', yy = startY;
+    for (const word of words) {
+      const test = line ? line + ' ' + word : word;
+      if (ctx.measureText(test).width > maxW && line) {
+        ctx.fillText(line, x, yy);
+        line = word;
+        yy += lineH;
+      } else line = test;
+    }
+    if (line) { ctx.fillText(line, x, yy); yy += lineH; }
+    return yy;
+  };
+  items.forEach((item, index) => {
+    ctx.fillStyle = '#b99a61';
+    ctx.beginPath(); ctx.arc(145, y - 10, 7, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#292d29';
+    y = wrapText(item, 170, y, maxWidth, 42) + 18;
+  });
+
+  const infoY = Math.max(y + 35, 790);
+  ctx.fillStyle = '#dce8d8';
+  ctx.beginPath(); ctx.roundRect(100, infoY, 880, 145, 20); ctx.fill();
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#315c43';
+  ctx.font = 'bold 27px Georgia, serif';
+  ctx.fillText(`Registro nº ${lastGiftReceipt.number}`, W / 2, infoY + 53);
+  ctx.fillStyle = '#555b51';
+  ctx.font = '25px Georgia, serif';
+  ctx.fillText(lastGiftReceipt.dateTime, W / 2, infoY + 98);
+
+  ctx.fillStyle = '#555b51';
+  ctx.font = '24px Georgia, serif';
+  ctx.fillText('Avenida Silvino Santis, nº 137', W / 2, H - 175);
+  ctx.fillText('Jardim Sumaré · Imperatriz – MA', W / 2, H - 135);
+  ctx.fillStyle = '#315c43';
+  ctx.font = 'italic 27px Georgia, serif';
+  ctx.fillText('Obrigado por fazer parte desse momento especial! 💚', W / 2, H - 75);
+
+  canvas.toBlob(blob => {
+    if (!blob) {
+      alert('Não foi possível gerar a imagem neste navegador. Tente novamente.');
+      return;
+    }
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `presente-joab-valeska-${lastGiftReceipt.number}.png`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1500);
+  }, 'image/png');
 }
 
 function resetGiftModal(){
